@@ -24,6 +24,9 @@ document.addEventListener('init', function(event) {
       document.getElementById('newCateg').addEventListener('click', () => {
         myApp.services.tasks.newCateg();
       });
+      document.getElementById('deleteAll').addEventListener('click', () => {
+        myApp.controllers.deleteAllTasks();
+      });
       document.querySelector('#custom-category-list').innerHTML = '';
       myApp.services.categories.forEach( categ => {
         myApp.services.tasks.showCateg(categ);

@@ -57,9 +57,6 @@ myApp.controllers = {
   
   suppression : function (data) {
 
-    console.log(data)
-    //console.log(event.target.parentNode.parentNode.data)
-
       if (data.importante) {
 
         document.querySelector('#important-list').innerHTML = '';
@@ -116,6 +113,18 @@ myApp.controllers = {
       }
     });
     myApp.services.tasks.lStorage.save();
-  }
+  },
 
+  deleteAllTasks : function () {
+    myApp.services.fixtures.forEach(elem => {
+        this.suppression(elem);
+    });
+    myApp.services.done.forEach(elem => {
+      myApp.services.done.splice(elem , 1);
+    });
+    myApp.services.important.forEach(elem => {
+        this.suppression(elem);
+    });
+    myApp.services.tasks.lStorage.save();
+  }
 };
