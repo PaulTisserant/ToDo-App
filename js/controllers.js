@@ -27,7 +27,7 @@ myApp.controllers = {
     let data = {
       title : document.querySelector("#title").value,
       desc: document.querySelector('#desc').value,
-      cat : document.querySelector('#cat').value.replace(" ","_"),
+      cat : document.querySelector('.select').value,
       importante : document.querySelector('#importante').checked,
       date : document.querySelector('#date').value
     }
@@ -38,6 +38,10 @@ myApp.controllers = {
       var yyyy = today.getFullYear();
       today = mm + '/' + dd + '/' + yyyy;
       data.date = today;
+    }
+
+    if (data.cat === ""){
+      data.cat = "Sans catégorie";
     }
 
     if (data.importante) {
@@ -89,20 +93,6 @@ myApp.controllers = {
     myApp.services.tasks.createDone(data);
   },
 
-  /*
-  newCateg : function () {
-    let monDialog = document.getElementById('my-dialog');
 
-    if (monDialog) {
-      monDialog.show();
-    } else {
-      ons.createElement('alert-dialog.html', { append: true })
-          .then(function(dialog) {
-            dialog.show();
-          });
-    }
-  }
-
-   */
 
 };

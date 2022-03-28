@@ -209,6 +209,82 @@ myApp.services = {
 
     },
 
+    newTask : function () {
+      document.querySelector('#myNavigator').pushPage('html/new_task.html').then(() =>{
+        let task = ons.createElement(`
+        <div>
+            <ons-toolbar>
+              <div class="left">
+                <ons-back-button>À faire</ons-back-button>
+              </div>
+              <div class="center">Nouvelle tâche</div>
+              <div class="right">
+                <ons-if platform="android">
+                  <ons-toolbar-button component="button/save-task">
+                    <ons-icon icon="md-save"></ons-icon>
+                  </ons-toolbar-button>
+                </ons-if>
+              </div>
+            </ons-toolbar>
+
+            <ons-list-title>Ajouter une nouvelle tache</ons-list-title>
+
+            <ons-list>
+
+              <ons-list-item >
+                <div class="center">
+                  <ons-input id="title" type="text" placeholder="Titre de la tâche" float></ons-input>
+                </div>
+              </ons-list-item>
+              
+              <ons-list-item >
+                <div class="center">
+                  <ons-input id="desc" type="text" placeholder="Description" float></ons-input>
+                </div>
+              </ons-list-item>
+          
+              <ons-list-item >
+                <div class="center">
+                  <ons-select class="select">
+                  </ons-select>
+                </div>
+              </ons-list-item>
+              
+              <ons-list-item modifier="nodivider">
+                <div class="center">
+                  <ons-input id="date" type="date" placeholder="" float></ons-input>
+                </div>
+              </ons-list-item>
+          
+              <ons-list-item modifier="underbar">
+     
+                <div class="left">
+                  <ons-switch id="importante" ></ons-switch>
+                </div>
+          
+                <label class="center" for="importante">Important</label>
+          
+              </ons-list-item>
+          
+            </ons-list>
+        </div>
+        `);
+        console.log(task)
+        document.querySelector('#form_new_task').appendChild(task);
+        document.getElementsByTagName('ons-icon')[0].addEventListener('click', () => {
+          myApp.controllers.clickCreate();
+          myApp.services.tasks.lStorage.save();
+        })
+
+        let categs = "";
+        for (let i = 1; i < myApp.services.categories.length ; i++) {
+          categs += `<option value='${myApp.services.categories[i]}'>${myApp.services.categories[i]}</option>` ;
+        }
+        let html = ons.createElement(`<div>${categs}</div>`);
+        document.querySelector('.select').appendChild(html);
+      });
+    },
+
     newCateg: function () {
       document.querySelector('#myNavigator').pushPage('html/new_categorie.html').then(() =>{
         let task = ons.createElement(`
@@ -249,8 +325,8 @@ myApp.services = {
 
         document.querySelector('#newCategPage').appendChild(task);
         document.querySelector('ons-toolbar-button[component="button/save-categ"]').addEventListener('click', () => {
-          if (!myApp.services.categories.includes(document.querySelector('#category').value.replace(" ", "_"))){
-            myApp.services.categories.push(document.querySelector('#category').value.replace(" ", "_"));
+          if (!myApp.services.categories.includes(document.querySelector('#category').value)){
+            myApp.services.categories.push(document.querySelector('#category').value);
             myApp.services.tasks.lStorage.save();
           } else {
             window.alert("La catégorie existe déjà !")
@@ -258,45 +334,73 @@ myApp.services = {
 
           document.querySelector('#custom-category-list').innerHTML = '';
           myApp.services.categories.forEach( categ => {
-            let html = ons.createElement(`
-            <ons-list-item tappable>
-              <div class="left">
-                <ons-radio name="categoryGroup" input-id="r-all" checked></ons-radio>
-              </div>
-              <label class="center" for="r-all">${categ}</label>
-            </ons-list-item>
-            `);
-
-            html.querySelector('ons-radio').addEventListener('change', (e) => {
-              console.log(e.target.parentNode.parentNode.parentNode.querySelector('label').innerHTML);
-
-              document.querySelector('#important-list').innerHTML = '';
-              myApp.services.important.forEach(function (data) {
-                myApp.services.tasks.createImportante(data);
-              });
-
-              document.querySelector('#pending-list').innerHTML = '';
-              myApp.services.fixtures.forEach(function (data) {
-                myApp.services.tasks.create(data);
-              });
-
-            });
-
-            document.querySelector('#custom-category-list').appendChild(html);
-
-
-
+            myApp.services.tasks.showCateg(categ);
           });
 
           document.querySelector('ons-navigator').popPage();
 
         })
 
-
-
-
       })
 
+    },
+
+    showCateg : function (data) {
+      let html = ons.createElement(`
+            <ons-list-item tappable>
+              <div class="left">
+                <ons-radio name="categoryGroup" input-id="r-all" checked></ons-radio>
+              </div>
+              <label class="center" for="r-all">${data}</label>
+            </ons-list-item>
+            `);
+
+      html.querySelector('ons-radio').addEventListener('change', (e) => {
+        console.log(e.target.parentNode.parentNode.parentNode.querySelector('label').innerHTML);
+        let currentCateg = e.target.parentNode.parentNode.parentNode.querySelector('label').innerHTML;
+        document.querySelector('#important-list').innerHTML = '';
+        document.querySelector('#pending-list').innerHTML = '';
+        document.querySelector('#completed-list').innerHTML = '';
+        switch (currentCateg) {
+          case "Toutes catégories":
+            myApp.services.important.forEach(function (data) {
+                myApp.services.tasks.createImportante(data);
+            });
+
+            myApp.services.fixtures.forEach(function (data) {
+                myApp.services.tasks.create(data);
+            });
+
+            myApp.services.done.forEach(function (data) {
+                myApp.services.tasks.createDone(data);
+            });
+            break;
+
+          default :
+            document.querySelector('#important-list').innerHTML = '';
+            myApp.services.important.forEach(function (data) {
+              if (data.cat === currentCateg) {
+                myApp.services.tasks.createImportante(data);
+              }
+            });
+
+            document.querySelector('#pending-list').innerHTML = '';
+            myApp.services.fixtures.forEach(function (data) {
+              if (data.cat === currentCateg) {
+                myApp.services.tasks.create(data);
+              }
+            });
+
+            document.querySelector('#completed-list').innerHTML = '';
+            myApp.services.done.forEach(function (data) {
+              if (data.cat === currentCateg) {
+                myApp.services.tasks.createDone(data);
+              }
+            });
+        }
+
+      });
+      document.querySelector('#custom-category-list').appendChild(html);
     },
 
   lStorage: {
@@ -351,7 +455,7 @@ myApp.services = {
   fixtures: [],
   important: [],
   done: [],
-  categories: []
+  categories: ["Toutes catégories","Sans catégorie"]
 };
 
 myApp.services.tasks.lStorage.load();
