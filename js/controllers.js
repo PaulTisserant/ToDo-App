@@ -87,12 +87,35 @@ myApp.controllers = {
   doneIt : function (event) {
     let data = event.target.parentNode.parentNode.parentNode.data;
 
-    this.suppression(data)
+    this.suppression(data);
     myApp.services.done.push(data);
     myApp.services.tasks.lStorage.save();
     myApp.services.tasks.createDone(data);
   },
 
 
+  suppressionCateg : function (name) {
+    myApp.services.categories.splice(myApp.services.categories.indexOf(name), 1);
+    document.querySelector('#custom-category-list').innerHTML = "";
+    myApp.services.categories.forEach(categorie => {
+      myApp.services.tasks.showCateg(categorie);
+    });
+    myApp.services.fixtures.forEach(elem => {
+      if (elem.cat === name) {
+        this.suppression(elem);
+      }
+    });
+    myApp.services.done.forEach(elem => {
+      if (elem.cat === name) {
+        this.suppression(elem);
+      }
+    });
+    myApp.services.important.forEach(elem => {
+      if (elem.cat === name) {
+        this.suppression(elem);
+      }
+    });
+    myApp.services.tasks.lStorage.save();
+  }
 
 };

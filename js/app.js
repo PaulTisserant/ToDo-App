@@ -18,14 +18,6 @@ document.addEventListener('init', function(event) {
       && document.querySelector('#pendingTasksPage')
       && !document.querySelector('#pendingTasksPage ons-list-item')
     ) {
-      document.querySelector("ons-toolbar-button[component='button/new-task']").addEventListener('click', () => {
-        myApp.services.tasks.newTask();
-      });
-
-      document.querySelector("ons-fab[component='button/new-task']").addEventListener('click', () => {
-        myApp.services.tasks.newTask();
-      });
-
       myApp.services.fixtures.forEach(function (data) {
         myApp.services.tasks.create(data);
       });
@@ -50,6 +42,28 @@ document.addEventListener('init', function(event) {
       myApp.services.tasks.createDone(data);
     });
   }
+
+  if(page.id === 'newTaskPage'){
+    let categs = "";
+    for (let i = 1; i < myApp.services.categories.length ; i++) {
+      categs += `<option value='${myApp.services.categories[i]}'>${myApp.services.categories[i]}</option>` ;
+    }
+    let html = ons.createElement(`<div>
+        <ons-select id="cat">
+            ${categs}
+        </ons-select>
+    </div>`);
+
+    console.log(html)
+    page.querySelector('#here').appendChild(html);
+
+
+    page.getElementsByTagName('ons-icon')[0].addEventListener('click', () => {
+      myApp.controllers.clickCreate();
+      myApp.services.tasks.lStorage.save();
+    })
+  }
+
 
 
 
