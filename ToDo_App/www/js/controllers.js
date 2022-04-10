@@ -51,6 +51,8 @@ myApp.controllers = {
       myApp.services.fixtures.push(data);
       myApp.services.tasks.create(data);
     }
+
+
     //document.location.reload()
     document.querySelector('ons-navigator').popPage();
   },

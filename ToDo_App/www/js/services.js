@@ -157,13 +157,6 @@ myApp.services = {
                       <ons-input id="date" type="date" placeholder="" float></ons-input>
                     </div>
                   </ons-list-item>
-                  <ons-list-item modifier="nodivider">
-                      <div className = "left">
-                        <ons-switch id = "importante" ${data.importante ? 'checked' : ''}> </ons-switch>
-                       </div>
-
-                      <label className="center" htmlFor="importante">Important</label>
-                  </ons-list-item>
               </ons-list>
           </div>  `
         )
@@ -180,7 +173,6 @@ myApp.services = {
             title: document.querySelector("#title").value ? document.querySelector("#title").value : data.title ,
             desc: document.querySelector('#description').value ? document.querySelector('#description').value : data.desc ,
             cat: document.querySelector('#cat').value ? document.querySelector('#cat').value : data.cat,
-            importante: document.querySelector('#importante').checked,
             date: document.querySelector('#date').value ? document.querySelector('#date').value : data.date
           }
 
@@ -240,7 +232,7 @@ myApp.services = {
               </ons-list-item>
                   <ons-list-item modifier="nodivider">
                       <div class="center">
-                          <ons-input id="category" type="text" placeholder="salut" float></ons-input>
+                          <ons-input id="category" type="text" placeholder="Catégorie" float></ons-input>
                       </div>
                   </ons-list-item>
               </ons-list>
