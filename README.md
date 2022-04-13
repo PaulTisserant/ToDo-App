@@ -2,7 +2,7 @@
 
 Classic toDo application developped in javaScript that allow you to turn it into an mobile app with cordova :
 
-# To generate the mobile app simply download cordova :
+## To generate the mobile app simply download cordova :
 
 > npm install cordova
 
