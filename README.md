@@ -18,6 +18,6 @@ And finally generate the mobile app of you choice IOS / Android
 
 A platform directory will be created with the generated code in it 
 
-Just open android studio in the android folder and luch the application on you emulator or your phone and then you have it !
+Just open android studio in the android folder and lunch the application on you emulator or your phone and then you have it !
 
 
